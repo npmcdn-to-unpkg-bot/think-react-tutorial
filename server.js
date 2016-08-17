@@ -16,7 +16,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 
-var COMMENTS_FILE = path.join(__dirname, 'comments.json');
+var DATA_FILE = path.join(__dirname, 'data.json');
 
 app.set('port', (process.env.PORT || 3000));
 
@@ -35,8 +35,8 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get('/api/comments', function(req, res) {
-  fs.readFile(COMMENTS_FILE, function(err, data) {
+app.get('/api/data', function(req, res) {
+  fs.readFile(DATA_FILE, function(err, data) {
     if (err) {
       console.error(err);
       process.exit(1);
@@ -45,28 +45,28 @@ app.get('/api/comments', function(req, res) {
   });
 });
 
-app.post('/api/comments', function(req, res) {
-  fs.readFile(COMMENTS_FILE, function(err, data) {
+app.post('/api/data', function(req, res) {
+  fs.readFile(DATA_FILE, function(err, data) {
     if (err) {
       console.error(err);
       process.exit(1);
     }
-    var comments = JSON.parse(data);
+    var data = JSON.parse(data);
     // NOTE: In a real implementation, we would likely rely on a database or
     // some other approach (e.g. UUIDs) to ensure a globally unique id. We'll
     // treat Date.now() as unique-enough for our purposes.
-    var newComment = {
+    var newData = {
       id: Date.now(),
       author: req.body.author,
       text: req.body.text,
     };
-    comments.push(newComment);
-    fs.writeFile(COMMENTS_FILE, JSON.stringify(comments, null, 4), function(err) {
+    data.push(newData);
+    fs.writeFile(DATA_FILE, JSON.stringify(data, null, 4), function(err) {
       if (err) {
         console.error(err);
         process.exit(1);
       }
-      res.json(comments);
+      res.json(data);
     });
   });
 });
