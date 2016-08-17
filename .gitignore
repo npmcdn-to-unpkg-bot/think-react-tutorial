@@ -3,5 +3,5 @@ node_modules
 .DS_Store
 
 # IDE #
-.idea/
+.idea/workspace.xml
 *.swp
